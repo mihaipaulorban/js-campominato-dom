@@ -1,22 +1,42 @@
 // FUNZIONI
 
-// Funzione che crea degli elementi con possibilità di cambiare tag contenuto o classe
+// Funzione che genera gli elementi con la possibilità di cambiare tag, contenuto o classe
 function createElement(tag, content, className, classNameAdd) {
     const element = document.createElement(tag);
     element.classList.add(className);
     element.append(content);
 
-    // Event listener che aggiunge un evento click a ogni div creato
-    element.addEventListener('click', function () {
-        console.log(this.textContent);
-
-        // Aggiunge una classe agli elementi cliccati
-        this.classList.add(classNameAdd);
+    element.addEventListener('click', function handleClick() {
+        if (giocoPerso) return;
+        
+        const numeroCliccato = parseInt(this.textContent);
+        if (bombe.includes(numeroCliccato)) {
+            this.style.backgroundColor = 'red';
+            console.log('Hai perso!');
+    
+            // Imposta il flag per indicare la perdita
+            giocoPerso = true;
+    
+            // Disabilita gli eventi di click su tutte le celle dopo aver perso
+            const celle = document.querySelectorAll('.cell');
+            celle.forEach(cell => {
+                cell.removeEventListener('click', handleClick);
+            });
+        } else {
+            this.classList.add(classNameAdd);
+    
+            // Rimuove l'evento click dopo il primo click
+            this.removeEventListener('click', handleClick);
+    
+            punteggio++;
+            console.log('Punteggio:', punteggio);
+        }
     });
 
     return element;
 }
 
+// Funzione che accetta come parametro la difficoltà scelta per generare un numero di bombe in base alla difficoltá
 function generaBombe(difficolta) {
     let maxNumber;
     if (difficolta === 'facile') {
@@ -27,16 +47,15 @@ function generaBombe(difficolta) {
         maxNumber = 49;
     }
 
-    const bombe = [];
+    bombe = [];
     while (bombe.length < 16) {
         const numeroCasuale = Math.floor(Math.random() * maxNumber) + 1;
         if (!bombe.includes(numeroCasuale)) {
             bombe.push(numeroCasuale);
         }
     }
-
-    return bombe;
 }
+
 
 // Funzione che genera 100 celle (difficoltá facile)
 function generaFacile() {
@@ -76,24 +95,25 @@ function generaDifficile() {
 
 // PROGRAMMA
 
-// variabili globali
-
+// Variabili globali
+let giocoPerso = false;
+let bombe = [];
+let punteggio = 0;
 const start = document.querySelector('.start');
 const selectDifficolta = document.querySelector('#difficolta');
 
 
 // Evento on click per la gameboard
 start.addEventListener('click', function () {
-    // Leva la classe hide e aggiunge la classe show
     const board = document.querySelector('.gameboard');
     board.classList.add('show');
     board.classList.remove('hide');
-});
-
-// evento per il cambio di difficoltá con il select
-selectDifficolta.addEventListener('change', function () {
 
     const difficoltaSelezionata = selectDifficolta.value;
+    generaBombe(difficoltaSelezionata);
+
+    // Reimposta il punteggio 
+    punteggio = 0;
 
     if (difficoltaSelezionata === 'facile') {
         generaFacile();
