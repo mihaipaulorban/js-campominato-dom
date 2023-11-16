@@ -88,4 +88,15 @@ footer {
 .fa-heart {
     font-size: 12px;
 }
+footer {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+span {
+    margin: 0 auto;
+    font-weight: bold;
+}
 

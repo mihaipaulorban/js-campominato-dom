@@ -1,3 +1,16 @@
+// Variabili globali
+let giocoPerso = false;
+let bombe = [];
+let punteggio = 0;
+const start = document.querySelector('.start');
+const selectDifficolta = document.querySelector('#difficolta');
+
+
+// Variabile per tenere traccia dell'elemento del punteggio nel footer
+const punteggioFooter = document.createElement('span');
+const footer = document.querySelector('footer');
+footer.appendChild(punteggioFooter);
+
 // FUNZIONI
 
 // Funzione che genera gli elementi con la possibilità di cambiare tag, contenuto o classe
@@ -14,26 +27,32 @@ function createElement(tag, content, className, classNameAdd) {
             this.style.backgroundColor = 'red';
             console.log('Hai perso!');
     
-            // Imposta il flag per indicare la perdita
             giocoPerso = true;
-    
-            // Disabilita gli eventi di click su tutte le celle dopo aver perso
+
+            punteggioFooter.textContent = `Il tuo Punteggio è di: ${punteggio}`;
+
             const celle = document.querySelectorAll('.cell');
             celle.forEach(cell => {
                 cell.removeEventListener('click', handleClick);
             });
         } else {
+            punteggioFooter.textContent = `Il tuo Punteggio è di: ${punteggio}`;
             this.classList.add(classNameAdd);
     
-            // Rimuove l'evento click dopo il primo click
             this.removeEventListener('click', handleClick);
     
             punteggio++;
             console.log('Punteggio:', punteggio);
+
         }
     });
 
     return element;
+}
+
+// Funzione che aggiorna il punteggio nel footer
+function aggiornaPunteggio() {
+    punteggioFooter.textContent = `Il tuo Punteggio è di: ${punteggio}`;
 }
 
 // Funzione che accetta come parametro la difficoltà scelta per generare un numero di bombe in base alla difficoltá
@@ -55,7 +74,6 @@ function generaBombe(difficolta) {
         }
     }
 }
-
 
 // Funzione che genera 100 celle (difficoltá facile)
 function generaFacile() {
@@ -92,16 +110,7 @@ function generaDifficile() {
         board.append(myElement);
     }
 }
-
 // PROGRAMMA
-
-// Variabili globali
-let giocoPerso = false;
-let bombe = [];
-let punteggio = 0;
-const start = document.querySelector('.start');
-const selectDifficolta = document.querySelector('#difficolta');
-
 
 // Evento on click per la gameboard
 start.addEventListener('click', function () {
@@ -112,8 +121,8 @@ start.addEventListener('click', function () {
     const difficoltaSelezionata = selectDifficolta.value;
     generaBombe(difficoltaSelezionata);
 
-    // Reimposta il punteggio 
     punteggio = 0;
+    aggiornaPunteggio();
 
     if (difficoltaSelezionata === 'facile') {
         generaFacile();
