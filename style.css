@@ -15,6 +15,7 @@ main {
     background-color:aquamarine;
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 50px 0;
@@ -98,5 +99,16 @@ footer {
 span {
     margin: 0 auto;
     font-weight: bold;
+}
+
+.messaggio {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+    display: none;
+}
+
+.mostra-messaggio {
+    display: block;
 }
 

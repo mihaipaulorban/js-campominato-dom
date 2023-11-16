@@ -31,6 +31,8 @@ function createElement(tag, content, className, classNameAdd) {
 
             punteggioFooter.textContent = `Il tuo Punteggio è di: ${punteggio}`;
 
+            haiPerso();
+
             const celle = document.querySelectorAll('.cell');
             celle.forEach(cell => {
                 cell.removeEventListener('click', handleClick);
@@ -48,6 +50,18 @@ function createElement(tag, content, className, classNameAdd) {
     });
 
     return element;
+}
+
+function haiPerso() {
+    const messaggioPerdita = document.querySelector('.messaggio');
+    messaggioPerdita.textContent = 'Hai perso!';
+    messaggioPerdita.classList.add('mostra-messaggio');
+}
+
+function haiVinto() {
+    const messaggioVittoria = document.querySelector('.messaggio');
+    messaggioVittoria.textContent = 'Hai vinto!';
+    messaggioVittoria.classList.add('mostra-messaggio');
 }
 
 // Funzione che aggiorna il punteggio nel footer
@@ -131,4 +145,16 @@ start.addEventListener('click', function () {
     } else if (difficoltaSelezionata === 'elevata') {
         generaDifficile();
     }
+
+    // Controllo di vittoria
+    const celle = document.querySelectorAll('.cell');
+    celle.forEach(cell => {
+        cell.addEventListener('click', function () {
+            const celleScoperte = document.querySelectorAll('.clickcolor').length;
+            if (celleScoperte === 100 - bombe.length) {
+                
+                haiVinto();
+            }
+        });
+    });
 });
